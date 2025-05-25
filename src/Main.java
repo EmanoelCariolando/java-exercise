@@ -1,38 +1,60 @@
-import entities.Comments;
-import entities.Post;
-
-import java.text.ParseException;
+import entities.Client;
+import entities.Order;
+import entities.OrderItem;
+import entities.Product;
+import enums.entities.OrderStatus;
 import java.text.SimpleDateFormat;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Scanner;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) throws ParseException {
+        Locale.setDefault(Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Scanner sc = new Scanner(System.in);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        System.out.println("Enter cliente data: ");
+        System.out.print("Name: ");
+        String name = sc.nextLine();
+        System.out.print("Email: ");
+        String email = sc.next();
+        System.out.print("Birth date (DD/MM/YYYY): ");
+        Date birthDate = sdf.parse(sc.next());
 
-        Comments c1 = new Comments("Wow Awesome!");
-        Comments c2 = new Comments("Welcome!");
+        Client client = new Client(name,email,birthDate);
 
-        Post p1 = new Post(
-                sdf.parse("21/06/2018 13:05:44"),
-                "My first Post",
-                "give me welcome!",
-                3);
-        p1.addComment(c1);
-        p1.addComment(c2);
+        System.out.println("Enter order data:");
+        System.out.print("Status (PENDING, PAID, SHIPPED, DELIVERED): ");
+        OrderStatus status = OrderStatus.valueOf(sc.next());
 
-        Comments c3 = new Comments("me too!");
-        Comments c4 = new Comments("Just Study!");
+        Order or = new Order(client,new Date(),status);
 
-        Post p2 = new Post(
-                sdf.parse("22/07/2018 10:02:00"),
-                "I need Money!",
-                "any tips?",
-                9);
-        p2.addComment(c3);
-        p2.addComment(c4);
 
-        System.out.println(p1);
+        System.out.print("How many items to this: ");
+        int many = sc.nextInt();
+
+        for(int i = 0; i < many; i++) {
+            System.out.println("Enter item #" + (i + 1) + " data: ");
+            System.out.print("Product name: ");
+            String productName = sc.next();
+            System.out.print("Product price: ");
+            Double productPrice = sc.nextDouble();
+
+
+            Product product = new Product(productName,productPrice);
+
+            System.out.print("Quantity: ");
+            int quantityItem = sc.nextInt();
+
+            OrderItem item = new OrderItem(quantityItem,new Product(productName,productPrice));
+            or.addItem(item);
+        }
+        System.out.println();
+        System.out.println("ORDER SUMMARY:");
+        System.out.println(or);
+
     }
-}
+
+    }
