@@ -1,5 +1,6 @@
 package application;
 import model.entities.Resevation;
+import model.exceptions.DomainException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,38 +14,39 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-        System.out.print("Room number: ");
-        int room = sc.nextInt();
-        System.out.print("Check-in date(dd/mm/yyyy): ");
-        Date checkIn = sdf.parse(sc.next());
-        System.out.print("Check-out date(dd/mm/yyyy): ");
-        Date checkOut = sdf.parse(sc.next());
-        Resevation reserv = new Resevation(checkOut, checkIn, room);
+        try {
+            System.out.print("Room number: ");
+            int room = sc.nextInt();
+            System.out.print("Check-in date(dd/mm/yyyy): ");
+            Date checkIn = sdf.parse(sc.next());
+            System.out.print("Check-out date(dd/mm/yyyy): ");
+            Date checkOut = sdf.parse(sc.next());
+            Resevation reserv = new Resevation(checkOut, checkIn, room);
 
-        if (!checkOut.after(checkIn)) {
-            System.out.print("Error in reservation: Check-out date must be after check-in date");
-        } else {
+            System.out.println("Reservation: " + reserv);
+
+            System.out.println("Enter data to update the reservation");
+
+            System.out.print("Room number: ");
+            room = sc.nextInt();
+            System.out.print("Check-in date(dd/mm/yyyy): ");
+            checkIn = sdf.parse(sc.next());
+            System.out.print("Check-out date(dd/mm/yyyy): ");
+            checkOut = sdf.parse(sc.next());
+
+            reserv.updateDate(checkIn,checkOut);
             System.out.println("Reservation: " + reserv);
         }
+        catch (ParseException e){
+          System.out.println("Invalid date format");
+        }
+        catch (DomainException e){
+            System.out.print("Error in Reservation: "+ e.getMessage());
+        }
+        catch (RuntimeException e){
+            System.out.println("Unxpected error");
+        }
 
-        System.out.println("Enter data to update the reservation");
-
-        System.out.print("Room number: ");
-        room = sc.nextInt();
-        System.out.print("Check-in date(dd/mm/yyyy): ");
-        checkIn = sdf.parse(sc.next());
-        System.out.print("Check-out date(dd/mm/yyyy): ");
-        checkOut = sdf.parse(sc.next());
-
-
-       String error = reserv.updateDate(checkIn,checkOut);
-
-       if (error != null){
-          System.out.println("Error in reservation: " + error);
-       }
-       else {
-           System.out.println("Reservation: " + reserv);
-       }
     sc.close();
     }
 }
