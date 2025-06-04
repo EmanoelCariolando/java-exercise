@@ -1,10 +1,11 @@
 package application;
-import model.entities.Resevation;
+
+import model.entities.Account;
 import model.exceptions.DomainException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -15,38 +16,32 @@ public class Main {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         try {
-            System.out.print("Room number: ");
-            int room = sc.nextInt();
-            System.out.print("Check-in date(dd/mm/yyyy): ");
-            Date checkIn = sdf.parse(sc.next());
-            System.out.print("Check-out date(dd/mm/yyyy): ");
-            Date checkOut = sdf.parse(sc.next());
-            Resevation reserv = new Resevation(checkOut, checkIn, room);
+        System.out.print("Enter account data: ");
+        System.out.print("Number: ");
+        int number = sc.nextInt();
+        System.out.print("Holder: ");
+        sc.nextLine();
+        String holder = sc.nextLine();
+        System.out.print("Initial balance: ");
+        double initialBalance = sc.nextDouble();
+        double withdrawLimit = 300;
+        System.out.println("This is your withdraw limit: "+ withdrawLimit);
+        Account account = new Account(number,holder,initialBalance,withdrawLimit);
 
-            System.out.println("Reservation: " + reserv);
+        System.out.print("Enter amount to be withdrawn: ");
+        double value = sc.nextDouble();
+        account.withdraw(value);
 
-            System.out.println("Enter data to update the reservation");
+        System.out.println("New Balance: " + account);
 
-            System.out.print("Room number: ");
-            room = sc.nextInt();
-            System.out.print("Check-in date(dd/mm/yyyy): ");
-            checkIn = sdf.parse(sc.next());
-            System.out.print("Check-out date(dd/mm/yyyy): ");
-            checkOut = sdf.parse(sc.next());
-
-            reserv.updateDate(checkIn,checkOut);
-            System.out.println("Reservation: " + reserv);
-        }
-        catch (ParseException e){
-          System.out.println("Invalid date format");
         }
         catch (DomainException e){
-            System.out.print("Error in Reservation: "+ e.getMessage());
+            System.out.println("Invalid data: " + e.getMessage());
         }
-        catch (RuntimeException e){
-            System.out.println("Unxpected error");
+        catch (InputMismatchException e){
+            System.out.println("Invalid!!!");
         }
 
-    sc.close();
+        sc.close();
     }
 }
