@@ -1,11 +1,14 @@
 package application;
 
-import model.entities.Account;
-import model.exceptions.DomainException;
+
+import entities.Contract;
+import entities.Installment;
+import services.ContractService;
+import services.PaypalService;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.InputMismatchException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -13,35 +16,29 @@ public class Main {
     public static void main(String[] args) throws ParseException {
         Locale.setDefault(Locale.US);
         Scanner sc = new Scanner(System.in);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        try {
-        System.out.print("Enter account data: ");
+        System.out.println("Enter contract data: ");
         System.out.print("Number: ");
-        int number = sc.nextInt();
-        System.out.print("Holder: ");
-        sc.nextLine();
-        String holder = sc.nextLine();
-        System.out.print("Initial balance: ");
-        double initialBalance = sc.nextDouble();
-        double withdrawLimit = 300;
-        System.out.println("This is your withdraw limit: "+ withdrawLimit);
-        Account account = new Account(number,holder,initialBalance,withdrawLimit);
+        Integer number = sc.nextInt();
+        System.out.print("Date (DD/MM/YYYY): ");
+        LocalDate date = LocalDate.parse(sc.next(), dtf);
+        System.out.print("Value of contract: ");
+        Double value = sc.nextDouble();
 
-        System.out.print("Enter amount to be withdrawn: ");
-        double value = sc.nextDouble();
-        account.withdraw(value);
+        Contract obj = new Contract(number,date, value);
 
-        System.out.println("New Balance: " + account);
+        System.out.print("Enter the installments: ");
+        Integer n = sc.nextInt();
 
-        }
-        catch (DomainException e){
-            System.out.println("Invalid data: " + e.getMessage());
-        }
-        catch (InputMismatchException e){
-            System.out.println("Invalid!!!");
+
+        ContractService contractService = new ContractService(new PaypalService());
+        contractService.processContract(obj, n);
+
+        for (Installment installment : obj.getInstallments()){
+            System.out.println(installment);
         }
 
-        sc.close();
+
     }
 }
