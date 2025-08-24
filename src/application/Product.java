@@ -27,7 +27,11 @@ public class Product implements Comparable<Product> {
 
     @Override
     public String toString() {
-        return " name: " + name + " price: "  + price + " , ";
+        return  name +  ","  + String.format("%.2f",price) + "\n" ;
+    }
+
+    public static String staticUpperCase(Product p){
+      return  p.getName().toUpperCase();
     }
 
     @Override
