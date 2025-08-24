@@ -11,16 +11,18 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         List<Product> list = new ArrayList<>();
 
-        list.add(new Product("TV", 50.00));
-        list.add(new Product("PC", 300.00));
-        list.add(new Product("TV", 400.00));
-        list.add(new Product("TV", 40.00));
+        list.add(new Product("TV", 55.00));
+        list.add(new Product("PC", 30.00));
+        list.add(new Product("Play", 40.00));
+        list.add(new Product("Controller", 60.00));
 
-        list.removeIf(new ProductPredicate());
+        double perce = 1.1;
 
-        for (Product p : list){
-            System.out.println(p);
-        }
+        list.forEach(p -> p.setPrice(p.getPrice() * perce) );
+
+        list.forEach(System.out::print);
+
+
 
 
     }
