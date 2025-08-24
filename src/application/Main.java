@@ -1,11 +1,9 @@
 package application;
 
-import application.util.UpperCaseName;
+import application.util.Verification;
 
-import javax.swing.*;
 import java.text.ParseException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) throws ParseException {
@@ -16,12 +14,24 @@ public class Main {
         list.add(new Product("TV", 50.00));
         list.add(new Product("PC", 30.00));
         list.add(new Product("Play", 40.00));
-        list.add(new Product("Controller", 60.00));
+        list.add(new Product("Tablet", 60.00));
+        list.add(new Product("Console", 100.00));
+        list.add(new Product("Control", 80.00));
+
+        System.out.print("Type one letter of your product for sum: ");
+        char letter = sc.next().charAt(0);
+
+        Verification veri = new Verification();
+
+        double sum = veri.filtered(list, p -> p.getName().charAt(0) == letter );
+
+        System.out.println("All sums: " + sum);
 
 
-        List<String> newList = list.stream().map(p -> p.getName().toUpperCase()).collect(Collectors.toList());
 
-        newList.forEach(System.out::println);
+
+
+
 
 
 
